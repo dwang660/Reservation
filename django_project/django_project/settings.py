@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django.contrib.admin',
     'users.apps.UsersConfig',
+    'table.apps.TableConfig',
+    'reserve.apps.ReserveConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -151,3 +153,5 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_URL = 'login'
