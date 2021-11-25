@@ -1,9 +1,6 @@
 from django.shortcuts import render
-from .forms import PostForm
+from .forms import CustomerForm
 # Create your views here.
 def new(request):
-    if request.method == "POST":
-        form = PostForm(request.Post)
-    else:
-        form = PostForm()
-    return render(request, "posts/new.html",{"form":form})
+    form = CustomerForm()
+    return render(request, "reserve/new.html",{"form":form})
