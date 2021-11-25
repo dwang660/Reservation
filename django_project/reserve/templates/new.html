@@ -1,0 +1,12 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h2>Reserve a table</h2>
+  <form method = "post">
+     <table>
+        {{ form }}
+     </table>
+     {% csrf_token %}
+     <button type = "Reserve">Create</button>
+  </form>
+{% endblock content %}
