@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Congrats, you have successfully reserved the table!</h2>
-<div class="border-top pt-3">
-    <small class="text-muted">
-        <a href="{% url 'reservesearch' %}">Return</a>
-    </small>
+<div class="alert alert-info">
+    Congrats, you have successfully reserved the table!
 </div>
 {% endblock content %}
