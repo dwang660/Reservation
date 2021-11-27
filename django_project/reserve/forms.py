@@ -1,8 +1,8 @@
-from django.forms import ModelForm
+from django import forms
 
-from .models import Post
+from reserve.models import reserves
 
-class PostForm(ModelForm):
+class CustomerForm(forms.ModelForm):
     class Meta:
-        model = Post
+        model = reserves
         fields = '__all__'
