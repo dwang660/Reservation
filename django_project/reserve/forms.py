@@ -1,6 +1,6 @@
 from django import forms
 
-from reserve.models import reserves
+from .models import reserves
 
 class CustomerForm(forms.ModelForm):
     class Meta:
