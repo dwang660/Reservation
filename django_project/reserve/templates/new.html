@@ -6,7 +6,11 @@
      <table>
         {{ form }}
      </table>
+     <table>
+        <input type ="date" name="Reservation_Date"> <input type ="time" name="Start_Time"> to <input type ="time" name="End_Time">
+     </table>
+     <h2>{{Reservation_ID}}</h2>
      {% csrf_token %}
-     <button type = "Reserve">Create</button>
+     <button type = "Reserve">Reserve</button>
   </form>
 {% endblock content %}
