@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="border-top pt-3">
+  <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Talbe ID</th>
+          <th scope="col">Capacity</th>
+          <th scope="col">isOutdoor</th>
+          <th scope="col">isBooth</th>
+          <th scope="col">available</th>
+        </tr>
+      </thead>
+      <tbody>
+    {% for rev in reservations %}
+        <div class="media-body">   
+            <tr>
+              <td>{{ rev.table_id }}</td>
+              <td>{{ rev.first_name }}</td>
+              <td>{{ rev.last_name }}</td>
+              <td>{{ rev.phone }}</td>
+              <td>{{ rev.come }}</td>
+            </tr>
+          </tbody>
+        </div>
+    {% endfor %}
+
+  </tbody>
+</table>
+<div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  Congrats, You have successfully reserve a Table.
+</div>
+</div>
+<div class="border-top pt-3">
+  <a href="/reserve" class="btn btn-info" role="button">Reserve Another Table</a>
+  <small class="text-muted">
+    For Faster Access Next Time<a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+  </small>
+</div>
+{% endblock content %}
