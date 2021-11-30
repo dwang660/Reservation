@@ -52,12 +52,13 @@ class SearchForm(forms.Form):
 class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
-        fields = ['first_name', 'last_name', 'phone', 'date', 'arrive', 'duration', 'customer_number', 'table_id', 'come', 'out' ]
+        fields = ['first_name', 'last_name', 'phone', 'date', 'arrive', 'duration', 'customer_number', 'table_id', 'table2nd_id', 'come', 'out' ]
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["arrive"].widget = TimeInput()
         self.fields["date"].widget = DateInput()
+        self.fields['table2nd_id'].required = False
         # self.fields["opening"].widget = TimeInput()
         # self.fields["closing"].widget = TimeInput()
         # self.fields["vernissage"].widget = DateTimeInput()
