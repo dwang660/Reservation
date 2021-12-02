@@ -1,14 +1,26 @@
 from django.db import models
+from django.db.models.fields import DateTimeField, NullBooleanField
+from django.db.models.fields.related import ForeignKey
+from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import User
+from table.models import Table
 
 # Create your models here.
 
-class reserve(models.Model):
-    reservation_id= models.IntegerField(max_length=10)
-    number_adult= models.IntegerField(max_length=10)
-    number_kids= models.IntegerField(max_length=10)
-    table_id_1= models.IntegerField(max_length=10)
-    table_id_2= models.IntegerField(max_length=10)
-    name= models.CharField(max_length=50)
-    phone= models.IntegerField(max_length=10)
-    reservation_time= models.TimeField()
-    
+class Reservation(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone = PhoneNumberField(null=False, blank=True, unique=False, region="US")
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    table_id = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='table_id')
+    table2nd_id = models.ForeignKey(Table, on_delete=models.CASCADE, null=True, related_name='table2nd_id')
+    date = models.DateField()
+    arrive = models.TimeField()
+    duration = models.DurationField()
+    come = models.DateTimeField(null=True)
+    out = models.DateTimeField(null=True)
+    customer_number = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+class HighTrafficDay(models.Model):
+    date = models.DateField()

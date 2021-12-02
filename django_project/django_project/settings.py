@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'address',
     'crispy_forms',
     'phonenumber_field',
     'django.contrib.admin',
@@ -155,3 +156,5 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = 'login'
+
+GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'

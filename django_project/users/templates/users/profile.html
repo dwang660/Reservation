@@ -20,4 +20,19 @@
           </div>
       </form>
     </div>
+
+    <script>
+      function myFunction() {
+        var checkBox = document.getElementById("id_The_same_as_mailing_address");  
+        var textShip = document.getElementById("id_mailing_addresss");  
+        var textBil = document.getElementById("id_billing_addresss");  
+     
+        if (checkBox.checked == true){
+              textBil.value=textShip.value;  
+        } else {
+              textBil.value="";
+        }
+     
+      }
+    </script>
 {% endblock content %}
