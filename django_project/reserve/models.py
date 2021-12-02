@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from table.models import Table
 
 # Create your models here.
+
 class Reservation(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
