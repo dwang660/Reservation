@@ -13,10 +13,18 @@
           <button class="btn btn-outline-info" type="submit">Find the table</button>
       </div>
   </form>
+  {% if user.is_authenticated %}
   <div class="border-top pt-3">
       <small class="text-muted">
-          Need An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+          You will continue as a logined in user {{ user.first_name }}
       </small>
   </div>
+  {% else %}
+  <div class="border-top pt-3">
+    <small class="text-muted">
+        You can make reservation as a guest, or<a class="ml-2" href="{% url 'login' %}">Login in</a> as an existing user account.
+    </small>
+   </div>
+    {% endif %}
 </div>
 {% endblock content %}

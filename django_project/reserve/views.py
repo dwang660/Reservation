@@ -1,14 +1,18 @@
 from django.http import request
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.base import View
 from .forms import ReservationForm, SearchForm
 from django.contrib import messages
 from .models import Reservation
+from .models import HighTrafficDay
 from table.models import Table
+from django.contrib.auth.models import User
 from django.urls import reverse
 from urllib.parse import urlencode
 from django.db.models import Q
 from itertools import chain
+from django.core.mail import send_mail
+from django.http import HttpResponse
 
 from datetime import date, datetime, time, timedelta
 
@@ -20,9 +24,25 @@ from django.views.generic import (
     DeleteView
 )
 
+def CheckHighTrafficDay(date):
+    HTDates = HighTrafficDay.objects.all()
+    for h in HTDates:
+        if date == h.date:
+            return True
+
+    return False
+
+def CheckWeekend(date):
+    weekno = date.weekday()
+    if weekno < 5:
+        return False
+    else:  # 5 Sat, 6 Sun
+        return True
+
+
 def search_table(request):
     if request.method == 'POST':
-        form = SearchForm(request.POST)
+        form = SearchForm(request.POST, my_arg='1')
         if form.is_valid():
             #form.save()
             #username = form.cleaned_data.get('username')
@@ -37,10 +57,15 @@ def search_table(request):
             custom_number = form.cleaned_data.get('customer_number')
             date = form.cleaned_data.get('date')
             arrive = form.cleaned_data.get('arrive')
+            arrive = datetime.strptime(arrive, '%H:%M:%S').time()
             duration = form.cleaned_data.get('duration')
+
+
 
             dt = datetime.combine(date,arrive)
             out = dt + timedelta(hours=int(duration))
+
+
 
             #filter the reservation in the some day
             rev = Reservation.objects.filter(come__date=dt.date())
@@ -80,12 +105,17 @@ def search_table(request):
                     messages.success(request, f'There is no single table available for the number of customers, but you can select a combination')
                     return render(request, 'reserve/search_result.html', {'form': form, 'table1': table1, 'table2': table2})            
                 else:
-                    messages.success(request, f'You can select the tables below')
-            
+                    if CheckWeekend(dt.date()):
+                        messages.success(request, f'You can select the tables below. \nYou will pay $1 holding fee for weekend')
+                    elif CheckHighTrafficDay(dt.date()):
+                        messages.success(request, f'You can select the tables below. \nYou will pay $1 holding fee for high traffic day')
+                    else:
+                        messages.success(request, f'You can select the tables below, without holding fee')
+
             return render(request, 'reserve/search_result.html', {'form': form, 'tables': tables})
   
     else:
-        form = SearchForm()
+        form = SearchForm(my_arg='0')
     return render(request, 'reserve/search.html', {'form': form})
     
 
@@ -94,13 +124,30 @@ class ReservationCreateView(CreateView):
     #fields = ['first_name', 'last_name', 'phone', 'date', 'arrive', 'duration']
 
     form_class = ReservationForm
-    success_url = 'list'
+    success_url = 'reservation-list'
+    
 
     def form_valid(self, form):
+
+        table2 = form.cleaned_data['table2nd_id']
+        # Reserve a combination
+        if table2:
+            messages.success(self.request, f'Please wait for owner comfirmation.')
+            mail_subject = 'Reservation Comfirmation for Owener'
+            message = "There is a reservation to comfirm"
+            superusers_emails = list(User.objects.filter(is_superuser=True).values_list('email', flat=True))
+            
+            #print(superusers_emails)
+
+            to_email = superusers_emails
+            send_mail(mail_subject, message, 'youremail', [to_email[0]])
+            #return HttpResponse('Please waif for owner comfirmation')
+
         if self.request.user.is_anonymous:
             pass
         else:
             form.instance.user_id = self.request.user
+        messages.success(self.request, f'Congrats, You have successfully reserve a Table.')
         return super().form_valid(form)
 
     # def form_valid(self, form):
@@ -121,13 +168,14 @@ class ReservationCreateView(CreateView):
         arrive = self.request.GET['arrive']
     
         duration = self.request.GET['duration']
-        dt = datetime.combine(datetime.strptime(date, '%Y-%m-%d').date(),datetime.strptime(arrive, '%H:%M').time())
+        dt = datetime.combine(datetime.strptime(date, '%Y-%m-%d').date(),datetime.strptime(arrive, '%H:%M:%S').time())
         out = dt + timedelta(hours=int(duration))
         if self.request.GET.get('table_id'):
             table_id = self.request.GET['table_id']
         if self.request.GET.get('table1_id'):
             table_id = self.request.GET['table1_id']
             table2_id = self.request.GET['table2_id']
+            #is_active = False
         else:
             table2_id = None
         
@@ -153,6 +201,7 @@ class ReservationCreateView(CreateView):
              'last_name':last_name,
              'first_name':first_name,
              'phone':phone,
+             #'is_active':is_active
         }
 
 class TableListView(ListView):
@@ -165,9 +214,15 @@ class ReservationListView(ListView):
     model = Reservation
     template_name = 'reserve/reservation_list.html'  # <app>/<model>_<viewtype>.html
 
-    
-
-
     def get_queryset(self):
-        return Reservation.objects.all()
+        if self.request.user.is_anonymous:
+            messages.warning(self.request, f'Only registered user see check the reservation history.')
+        else:
+            #user = get_object_or_404(User, username=self.kwargs.get('username'))
+            reservations = Reservation.objects.filter(user_id=self.request.user)
+            if not reservations:
+                messages.warning(self.request, f'There is no reservations for you.')
+            return reservations
     context_object_name = 'reservations'
+
+

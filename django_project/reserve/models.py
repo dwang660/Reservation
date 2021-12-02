@@ -19,3 +19,7 @@ class Reservation(models.Model):
     come = models.DateTimeField(null=True)
     out = models.DateTimeField(null=True)
     customer_number = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+class HighTrafficDay(models.Model):
+    date = models.DateField()

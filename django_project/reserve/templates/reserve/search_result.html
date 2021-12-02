@@ -24,18 +24,17 @@
       </fieldset>
       <div class="form-group">
         <button class="btn btn-outline-info" type="submit">Reserve</button>
+        <input class="btn btn-outline-info" type="button" value="Modify Search" onclick="history.back()">
       </div>
   </form>
   {% if tables %}
   <div class="border-top pt-3">
     <table class="table">
-        <thead class="thead-dark">
+        <thead class="thead-light">
           <tr>
-            <th scope="col">Talbe ID</th>
-            <th scope="col">Capacity</th>
-            <th scope="col">isOutdoor</th>
+            <th scope="col">Table Name</th>
+            <th scope="col">Seats</th>
             <th scope="col">isBooth</th>
-            <th scope="col">available</th>
           </tr>
         </thead>
         <tbody>
@@ -44,9 +43,7 @@
                   <tr>
                     <td>{{ table.tableId }}</td>
                     <td>{{ table.capacity }}</td>
-                    <td>{{ table.isOutdoor }}</td>
                     <td>{{ table.isBooth }}</td>
-                    <td>{{ table.isCurAvailable }}</td>
                   </tr>
                 </tbody>
               </div>
