@@ -241,8 +241,8 @@ class ReservationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
     success_url = '/'
 
     def test_func(self):
-        post = self.get_object()
-        if self.request.user == Reservation.user_id:
+        rev = self.get_object()
+        if self.request.user == rev.user_id:
             return True
         return False
     
