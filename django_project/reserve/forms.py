@@ -86,7 +86,7 @@ class SearchForm(forms.Form):
 class ReservationForm(ModelForm):
     class Meta:
         model = Reservation
-        fields = ['first_name', 'last_name', 'phone', 'date', 'arrive', 'duration', 'customer_number', 'table_id', 'table2nd_id', 'come', 'out', 'is_active']
+        fields = ['first_name', 'last_name', 'phone', 'date', 'arrive', 'duration', 'customer_number', 'table_id', 'table2nd_id', 'come', 'out']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -104,11 +104,6 @@ class ReservationForm(ModelForm):
         self.fields['out'].widget.attrs['readonly'] = True
         self.fields['arrive'].widget = forms.HiddenInput()
         self.fields['duration'].widget = forms.HiddenInput()
-        self.fields['is_active'].widget = forms.HiddenInput()
-        self.fields['is_active'].widget = forms.HiddenInput()
-        self.fields['is_active'].widget = forms.HiddenInput()
-        self.fields['is_active'].widget = forms.HiddenInput()
-        self.fields['is_active'].widget = forms.HiddenInput()
         # self.fields["opening"].widget = TimeInput()
         # self.fields["closing"].widget = TimeInput()
         # self.fields["vernissage"].widget = DateTimeInput()

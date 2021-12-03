@@ -14,6 +14,16 @@ from itertools import chain
 from django.core.mail import send_mail
 from django.http import HttpResponse
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import User
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
+
 from datetime import date, datetime, time, timedelta
 
 from django.views.generic import (
@@ -226,3 +236,15 @@ class ReservationListView(ListView):
     context_object_name = 'reservations'
 
 
+class ReservationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Reservation
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == Reservation.user_id:
+            return True
+        return False
+    
+class ReservationDetailView(DetailView):
+    model = Reservation
