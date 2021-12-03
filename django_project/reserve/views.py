@@ -134,7 +134,7 @@ class ReservationCreateView(CreateView):
     #fields = ['first_name', 'last_name', 'phone', 'date', 'arrive', 'duration']
 
     form_class = ReservationForm
-    success_url = 'reservation-list'
+    success_url = 'reservation_list'
     
 
     def form_valid(self, form):
@@ -182,10 +182,10 @@ class ReservationCreateView(CreateView):
         out = dt + timedelta(hours=int(duration))
         if self.request.GET.get('table_id'):
             table_id = self.request.GET['table_id']
+
         if self.request.GET.get('table1_id'):
             table_id = self.request.GET['table1_id']
             table2_id = self.request.GET['table2_id']
-            #is_active = False
         else:
             table2_id = None
         
@@ -226,7 +226,7 @@ class ReservationListView(ListView):
 
     def get_queryset(self):
         if self.request.user.is_anonymous:
-            messages.warning(self.request, f'Only registered user see check the reservation history.')
+            messages.warning(self.request, f'Only registered user can see the reservation history.\n If you want cancel, please all the restaurant.')
         else:
             #user = get_object_or_404(User, username=self.kwargs.get('username'))
             reservations = Reservation.objects.filter(user_id=self.request.user)
