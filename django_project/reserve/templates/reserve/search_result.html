@@ -17,8 +17,8 @@
           {% endif %}
           {% if table1 %}
           <label for="cars">You will reserve two tables {{table1.tableId}} and {{table2.tableId}}</label>
-          <input type='text' value="{{table1.id}}" name="table1_id">
-          <input type='text' value="{{table2.id}}" name="table2_id">
+          <input type='hidden' value="{{table1.id}}" name="table1_id">
+          <input type='hidden' value="{{table2.id}}" name="table2_id">
           {% endif %}
          </select>
       </fieldset>

@@ -26,11 +26,9 @@ FAVORITE_PAYMENT_CHOICES = [
 class ProfileUpdateForm(forms.ModelForm):
     prefer_payment = forms.ChoiceField(required=False, widget=forms.Select, choices=FAVORITE_PAYMENT_CHOICES)
     
-    The_same_as_mailing_address = forms.BooleanField(required=False)
-
-    The_same_as_mailing_address = forms.DateField(required=False, widget=forms.CheckboxInput(attrs={'onClick': 'myFunction();'}))
+    isSame = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'onClick': 'myFunction();'}))
 
 
     class Meta:
         model = Profile
-        fields = ['phone', 'mailing_addresss', 'The_same_as_mailing_address', 'billing_addresss', 'prefer_payment']
+        fields = ['phone', 'mailing_addresss', 'isSame', 'billing_addresss', 'prefer_payment']
