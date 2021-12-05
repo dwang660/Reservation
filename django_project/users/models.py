@@ -13,6 +13,7 @@ class Profile(models.Model):
     points = models.IntegerField(null=True)
     prefer_table = models.OneToOneField(Table, on_delete=models.CASCADE, null=True)
     prefer_payment = models.CharField(max_length=100, null=True)
+    isSame = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'

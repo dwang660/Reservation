@@ -142,7 +142,7 @@ class ReservationCreateView(CreateView):
         table2 = form.cleaned_data['table2nd_id']
         # Reserve a combination
         if table2:
-            messages.success(self.request, f'Please wait for owner comfirmation.')
+            messages.success(self.request, f'Owner will comfirm your reservation.')
             mail_subject = 'Reservation Comfirmation for Owener'
             message = "There is a reservation to comfirm"
             superusers_emails = list(User.objects.filter(is_superuser=True).values_list('email', flat=True))
@@ -232,6 +232,9 @@ class ReservationListView(ListView):
             reservations = Reservation.objects.filter(user_id=self.request.user)
             if not reservations:
                 messages.warning(self.request, f'There is no reservations for you.')
+            else:
+                msg = 'You have points: '+str(reservations.count())
+                messages.success(self.request, msg)
             return reservations
     context_object_name = 'reservations'
 
